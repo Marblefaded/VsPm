@@ -1,0 +1,20 @@
+﻿@inherits LayoutComponentBase
+
+<PageTitle>Vs.Pm.Web</PageTitle>
+
+<MudThemeProvider/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
+
+<div class="page">
+    <div style="background-image:none;background-color:cadetblue;" class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>

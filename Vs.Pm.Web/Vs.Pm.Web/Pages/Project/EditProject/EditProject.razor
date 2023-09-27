@@ -1,0 +1,15 @@
+﻿@inherits EditProjectView
+
+
+<EditForm Model="@ProjectViewModel" OnValidSubmit="Save">
+    <DataAnnotationsValidator />
+    <MudDialog Style="width: 40%;">
+        <DialogContent>
+            <div style="border-bottom: 1px solid grey; padding-bottom: 15px;margin-top:-24px;" class="d-flex justify-content-between">
+                <MudButton Style="margin-right: 5%;" type="submit" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Success">Save</MudButton>
+            </div>
+            <MudTextField Label="Title" 
+            @bind-Value="ProjectViewModel.Title" For="@(() => ProjectViewModel.Title)" />
+        </DialogContent>
+    </MudDialog>
+</EditForm>

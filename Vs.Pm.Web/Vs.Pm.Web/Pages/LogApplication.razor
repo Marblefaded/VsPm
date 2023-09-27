@@ -1,0 +1,92 @@
+﻿@page "/system"
+@using MudBlazor
+@inherits LogApplicationView
+
+<body style="background-color:#FFF8DC">
+    <div class="сontainer">
+        <div class="row">
+            <div class="col">
+                <h3 style="margin-left:9%">
+                    LogApplicationError
+                    <MudButton OnClick="(()=>PushError())" Variant="Variant.Filled" Color="Color.Error">
+                        Press me
+                    </MudButton>
+                </h3>
+            </div>
+            @if (Model != null)
+            {
+                <div class="col col-lg-2">
+                    <input style="margin-left:60%" type="date" class="form-control-sm" placeholder="Search" @bind-value="@FilterDate" @bind-value:event="oninput" />
+                </div>
+                <div class="col col-lg-1">
+                    <input style="margin-right:100%" type="text" class="form-control-sm" placeholder="Search" @bind-value="@FilterError" @bind-value:event="oninput" />
+                </div>
+                <div class="col col-lg-1">
+                    <MudButton @bind-value="@FilterError" Style="margin-right:100%" OnClick="(()=>ClearInput())" Variant="Variant.Filled" Color="Color.Error">
+                        X
+                    </MudButton>
+                </div>
+            }
+        </div>
+    </div>
+
+    @if (Model == null)
+    {
+        <MudGrid Justify="Justify.Center" Style="align-items: center; margin-top:250px;background-color:#FFDEAD">
+            <MudProgressCircular Color="Color.Error" Size="Size.Large" Indeterminate="true" Style="position:absolute" />
+        </MudGrid>
+    }
+    else
+    {
+        <MudTable Items="@Model" SortLabel="Sort" FixedHeader="true" Height="980px" Style="width: 90%; margin-left: 5%">
+            <HeaderContent>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Data.ViewModel.LogApplicationViewModel, object>(x=>x.LogApplicationId)">
+                        id
+                    </MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Data.ViewModel.LogApplicationViewModel, object>(x=>x.ErrorMessage)">
+                        Message
+                    </MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Data.ViewModel.LogApplicationViewModel, object>(x=>x.Date)">
+                        date
+                    </MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Data.ViewModel.LogApplicationViewModel, object>(x=>x.ErrorContext)">
+                        errorContext
+                    </MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Data.ViewModel.LogApplicationViewModel, object>(x=>x.ErrorInnerException)">
+                        innerEx
+                    </MudTableSortLabel>
+                </MudTh>
+
+                <MudTh>
+                </MudTh>
+            </HeaderContent>
+            <RowTemplate Context="item">
+                <MudTd DataLabel="id">@item.LogApplicationId</MudTd>
+                <MudTd DataLabel="Message">@item.ErrorMessage</MudTd>
+                <MudTd DataLabel="date">@item.Date</MudTd>
+                <MudTd DataLabel="errorContext">@item.ErrorContext</MudTd>
+                <MudTd DataLabel="innerEx">@item.ErrorInnerException</MudTd>
+
+            </RowTemplate>
+        </MudTable>
+    }
+
+</body>
+@code {
+    private bool dense = false;
+    private bool hover = true;
+    private bool striped = false;
+    private bool bordered = true;
+
+    public Origin TransformOrigin { get; set; } = Origin.TopCenter;
+    public Origin AnchorOrigin { get; set; } = Origin.BottomCenter;
+}

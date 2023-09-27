@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vs.Pm.Web", "Vs.Pm.Web\Vs.Pm.Web.csproj", "{C7C096E7-E2CF-4B29-B438-49DCC46D0896}"
+	ProjectSection(ProjectDependencies) = postProject
+		{55FF176D-BD47-4DB8-9286-98B5E17ACAF7} = {55FF176D-BD47-4DB8-9286-98B5E17ACAF7}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vs.Pm.Pm.Db", "Vs.Pm.Pm.Db\Vs.Pm.Pm.Db.csproj", "{55FF176D-BD47-4DB8-9286-98B5E17ACAF7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C7C096E7-E2CF-4B29-B438-49DCC46D0896}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7C096E7-E2CF-4B29-B438-49DCC46D0896}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7C096E7-E2CF-4B29-B438-49DCC46D0896}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7C096E7-E2CF-4B29-B438-49DCC46D0896}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55FF176D-BD47-4DB8-9286-98B5E17ACAF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55FF176D-BD47-4DB8-9286-98B5E17ACAF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55FF176D-BD47-4DB8-9286-98B5E17ACAF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55FF176D-BD47-4DB8-9286-98B5E17ACAF7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D27F30EE-13B9-4CC7-9305-0FDA46354840}
+	EndGlobalSection
+EndGlobal

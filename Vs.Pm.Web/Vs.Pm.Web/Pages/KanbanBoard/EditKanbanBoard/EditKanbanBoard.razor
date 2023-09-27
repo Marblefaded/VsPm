@@ -1,0 +1,45 @@
+﻿@inherits EditKanbanBoardView
+
+
+<EditForm Model="@TaskViewModel" OnValidSubmit="Save">
+    <DataAnnotationsValidator />
+    <MudDialog Style="width: 40%;">
+        <DialogContent>
+            <div style="border-bottom: 1px solid grey; padding-bottom: 15px;margin-top:-24px;" class="d-flex justify-content-between">
+                <MudButton Style="margin-right: 5%;" type="submit" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Success">Save</MudButton>
+            </div>
+            <MudTextField Label="Title"
+            @bind-Value="TaskViewModel.Title" For="@(() => TaskViewModel.Title)" />
+            <MudTextField Label="Description"
+            @bind-Value="TaskViewModel.Description" For="@(() => TaskViewModel.Description)" />
+            <MudSelect T="int" Label="ProjectId" Variant="Variant.Text" @bind-Value="TaskViewModel.ProjectId">
+                @if (ProjectViewModel != null)
+                {
+                    @foreach (var item in ProjectViewModel)
+                    {
+                        <MudSelectItem Value="@item.ProjectId">@item.Title</MudSelectItem>
+                    }
+                }
+            </MudSelect>
+            <MudSelect T="int" Label="StatusId" Variant="Variant.Text" @bind-Value="TaskViewModel.StatusId">
+                @if (StatusViewModel != null)
+                {
+                    @foreach (var item in StatusViewModel)
+                    {
+                        <MudSelectItem Value="@item.StatusId">@item.Title</MudSelectItem>
+                    }
+                }
+            </MudSelect>
+            <MudSelect T="int" Label="TaskTypeId" Variant="Variant.Text" @bind-Value="TaskViewModel.TaskTypeId">
+                @if (TaskTypeViewModel != null)
+                {
+                    @foreach (var item in TaskTypeViewModel)
+                    {
+                        <MudSelectItem Value="@item.TaskTypeId">@item.Title</MudSelectItem>
+                    }
+                }
+            </MudSelect>
+
+        </DialogContent>
+    </MudDialog>
+</EditForm>

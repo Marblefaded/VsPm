@@ -1,0 +1,124 @@
+﻿@page "/dashboard"
+@using Vs.Pm.Web.Data.ViewModel;
+@using Vs.Pm.Web.Data.Service;
+@inherits KanbanView
+
+<body style="background-color:#FFF8DC">
+    <div class="сontainer">
+        <div class="row">
+            <div class="col">
+                <h3 style="margin-left:9%">
+                    Dashboard
+                </h3>
+
+            </div>
+            <div class="col">
+                <input style="margin-right:100%" type="text" class="form-control-lg" placeholder="Filter Task..." @bind-value="@FilterTask" @bind-value:event="oninput" />
+               @*  <MudButton @bind-value="@FilterValue" Style="margin-right:100%" OnClick="(()=>ClearInput())" Variant="Variant.Filled" Color="Color.Error">
+                    X
+                </MudButton> *@
+            </div>
+            <div class="col">
+                <MudSelect T="int" Label="ProjectId" AnchorOrigin="Origin.BottomCenter" @bind-Value="@FilterProject">
+                    @if (ProjectViewModel != null)
+                    {
+                        @foreach (var item in ProjectViewModel)
+                        {
+                            <MudSelectItem Value="@item.ProjectId">@item.Title</MudSelectItem>
+                        }
+                    }
+                </MudSelect>
+                @* <MudButton @bind-value="@FilterProject" Style="margin-right:100%" OnClick="(()=>ClearInput())" Variant="Variant.Filled" Color="Color.Error">
+                    X
+                </MudButton> *@
+            </div>
+            <div class="col">
+                <MudSelect T="int" Label="TaskTypeId" AnchorOrigin="Origin.BottomCenter" @bind-Value="@FilterTaskType">
+                    @if (ListTaskType != null)
+                    {
+                        @foreach (var item in ListTaskType)
+                        {
+                            <MudSelectItem Value="item.TaskTypeId">
+                                @item.Title
+                            </MudSelectItem>
+                        }
+                    }
+                </MudSelect>
+                @* <MudButton @bind-value="@FilterTaskType" Style="margin-right:100%" OnClick="(()=>ClearInput())" Variant="Variant.Filled" Color="Color.Error">
+                    X
+                </MudButton> *@
+            </div>
+
+
+        </div>
+    </div>
+
+    <MudDropContainer T="DropItem" Items="_items" @ref="container" ItemsSelector="@((item,dropzone) => item.Selector == dropzone)" ItemDropped="ItemUpdated" Class="d-flex flex-wrap flex-grow-1">
+
+        <ChildContent>
+
+            @foreach (var item in ListStatus)
+            {
+                var dropzone = item.Title;
+                <MudPaper Class="ma-4 flex-grow-1">
+                    <MudList Clickable="true" Class="d-flex flex-column mud-height-full">
+                        <MudListSubheader>
+                            <MudButton ButtonType="ButtonType.Submit" Color="Color.Success" @onclick="(() => AddItemDialog(item.Title))">
+                                @item.Title +
+                            </MudButton>
+                        </MudListSubheader>
+                        <MudDropZone T="DropItem" Identifier="@dropzone" Class="flex-grow-1" />
+                    </MudList>
+                </MudPaper>
+            }
+
+        </ChildContent>
+
+        <ItemRenderer>
+            <MudButton ButtonType="ButtonType.Submit" @onclick="(() => EditItemDialog(context.taskViewModel))">
+
+                <h8>
+                    <font color="#5F9EA0" style="margin-right:40%">
+
+                        @GetType(context.taskViewModel.TaskTypeId)
+                    </font>
+                </h8>
+                <h5>
+                    <font color="black">
+                        <br />
+                        <br />
+                        @context.taskViewModel.Title
+                        @* <br /> *@
+                    </font>
+                </h5>
+
+            </MudButton>
+        </ItemRenderer>
+    </MudDropContainer>
+
+
+
+</body>
+@code
+{
+    public void ItemUpdated(MudItemDropInfo<DropItem> dropItem)
+    {
+        dropItem.Item.Selector = dropItem.DropzoneIdentifier;
+        var list1 = ListStatus.FirstOrDefault(x => x.Title == dropItem.Item.Selector);
+        dropItem.Item.taskViewModel.StatusId = list1.StatusId;
+        SaveData(dropItem.Item.taskViewModel);
+    }
+
+    protected override async void OnInitialized()
+    {
+        base.OnInitialized();
+        ProjectViewModel = ProjectService.GetAll();
+    }
+
+    public string GetType(int status)
+    {
+        ListTaskType = TaskTypeService.GetAll();
+        var resualt = ListTaskType.FirstOrDefault(x => x.TaskTypeId == status).Title;
+        return resualt;
+    }
+}
