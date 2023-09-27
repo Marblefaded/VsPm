@@ -20,7 +20,7 @@ namespace Vs.Pm.Web.Pages.WorkingStatus
 
 
         public bool isRemove;
-        public string filterValue = "";
+        public string mFilterValue;
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
@@ -33,22 +33,22 @@ namespace Vs.Pm.Web.Pages.WorkingStatus
 
         public string FilterValue
         {
-            get => filterValue;
+            get => mFilterValue;
 
             set
             {
-                filterValue = value;
+                mFilterValue = value;
                 Filter();
             }
         }
         protected void Filter()
         {
-            Model = Service.FilteringEmploers(filterValue);
+            Model = Service.FilteringEmploers(mFilterValue);
             StateHasChanged();
         }
         public void ClearInput()
         {
-            filterValue = "";
+            mFilterValue = "";
             Model = Service.GetAll();
             StateHasChanged();
         }
@@ -61,15 +61,14 @@ namespace Vs.Pm.Web.Pages.WorkingStatus
 
                 var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.Medium };
                 var parameters = new DialogParameters<EditTaskType.EditTaskType> { { x => x.TaskTypeViewModel, newItem } };
-                parameters.Add(x => x.Title, "Создание проживающего");
                 var dialog = DialogService.Show<EditTaskType.EditTaskType>("", parameters, options);
                 var result = await dialog.Result;
                 if (!result.Canceled)
                 {
-                    TaskTypeViewModel returnModel = new TaskTypeViewModel();
-                    //returnModel = (UserViewModel)result.Data;
-                    returnModel = newItem;
-                    var newUser = Service.Create(returnModel);
+                    /*TaskTypeViewModel returnModel = new TaskTypeViewModel();
+                    //returnModel = (UserViewModel)result.Data;*/
+                    /*returnModel = newItem;*/
+                    var newUser = Service.Create(newItem);
                     Model.Add(newItem);
                     Service.GetAll();
                     StateHasChanged();
@@ -86,7 +85,6 @@ namespace Vs.Pm.Web.Pages.WorkingStatus
         {
             var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.Medium };
             var parameters = new DialogParameters<EditTaskType.EditTaskType> { { x => x.TaskTypeViewModel, item } };
-            parameters.Add(x => x.Title, "Изменение проживающего");
             var dialog = DialogService.Show<EditTaskType.EditTaskType>("", parameters, options);
             var result = await dialog.Result;
             if (!result.Canceled)

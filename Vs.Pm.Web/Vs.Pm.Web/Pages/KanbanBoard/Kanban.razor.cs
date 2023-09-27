@@ -37,7 +37,7 @@ namespace Vs.Pm.Web.Pages.KanbanBoard
                         };
                         serverData.Add(value);
                     }
-                    await LoadServerData();
+                    await UpdateData();
                     /*Task.Yield();*/
                     await InvokeAsync(StateHasChanged);
                 }
@@ -47,9 +47,6 @@ namespace Vs.Pm.Web.Pages.KanbanBoard
                 LogService.Create(LogModel, ex.Message, ex.StackTrace, ex.InnerException.Message, DateTime.Now);
             }
         }
-
-
-        public List<StatusViewModel> ListStatus = new List<StatusViewModel>();
 
         [Inject] protected IDialogService DialogService { get; set; }
         [Inject] protected StatusService Service { get; set; }
@@ -61,7 +58,8 @@ namespace Vs.Pm.Web.Pages.KanbanBoard
         public List<TaskViewModel> ListTask = new List<TaskViewModel>();
 
         public List<TaskTypeViewModel> ListTaskType = new List<TaskTypeViewModel>();
-        public TaskViewModel taskModel { get; set; } = new TaskViewModel();
+
+        public List<StatusViewModel> ListStatus = new List<StatusViewModel>();
 
         public List<DropItem> serverData = new List<DropItem>();
         public List<ProjectViewModel> ProjectViewModel { get; set; } = new List<ProjectViewModel>();
@@ -76,8 +74,6 @@ namespace Vs.Pm.Web.Pages.KanbanBoard
         public LogApplicationViewModel LogModel = new LogApplicationViewModel();
 
         public List<DropItem> _items = new();
-        protected List<TaskViewModel> Model { get; set; }
-        private bool _addSectionOpen;
 
         public class DropItem
         {
@@ -86,56 +82,58 @@ namespace Vs.Pm.Web.Pages.KanbanBoard
 
             public string Selector { get; set; }
         }
-        public string filterTask;
-        public int filterProject;
-        public int filterTaskType;
+        public string mFilterTask;
+        public int mFilterProject;
+        public int mFilterTaskType;
         public string FilterTask
 {
-            get => filterTask;
+            get => mFilterTask;
 
             set
             {
-                filterTask = value;
+                mFilterTask = value;
                 FilteredTask();
             }
         }
 
         public int FilterProject
         {
-            get => filterProject;
+            get => mFilterProject;
 
             set
             {
-                filterProject = value;
+                mFilterProject = value;
                 FilteredProject();
             }
         }
         public int FilterTaskType
         {
-            get => filterTaskType;
+            get => mFilterTaskType;
 
             set
             {
-                filterTaskType = value;
+                mFilterTaskType = value;
                 FilteredTaskTypes();
             }
         }
 
-        public async void SaveData(TaskViewModel item)
+        public async Task ClearFilters()
         {
-            try
+            mFilterTask = "";
+            mFilterProject = 0;
+            mFilterTaskType = 0;
+            ListTask = TaskService.GetAll();
+            foreach (var item in ListTask)
             {
-                var newItem = TaskService.Update(item);
-                var index = ListStatus.FindIndex(x => x.StatusId == newItem.StatusId);
-                ListTask[index] = newItem;
-
-                StateHasChanged();
-
+                var oldItem = serverData.FirstOrDefault(x => x.taskViewModel.TaskId == item.TaskId);
+                serverData.Remove(oldItem);
+                var rez = new DropItem() { taskViewModel = item, Selector = ListStatus.FirstOrDefault(x => x.StatusId == item.StatusId).Title };
+                serverData.Add(rez);
             }
-            catch (Exception ex)
-            {
-                LogService.Create(LogModel, ex.Message, ex.StackTrace, ex.InnerException.Message, DateTime.Now);
-            }
+            await UpdateData();
+            container?.Refresh();
+            StateHasChanged();
+
         }
 
         public async Task AddItemDialog(string status)
@@ -147,21 +145,16 @@ namespace Vs.Pm.Web.Pages.KanbanBoard
                 newItem.StatusId = List.StatusId;
                 var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.Medium };
                 var parameters = new DialogParameters<EditTask> { { x => x.TaskViewModel, newItem } };
-                parameters.Add(x => x.Title, "Add Task");
                 var dialog = DialogService.Show<EditTask>("", parameters, options);
                 var result = await dialog.Result;
                 if (!result.Canceled)
                 {
-                    /*TaskViewModel returnModel = new TaskViewModel();
-
-                    returnModel = newItem;*/
                     var newUser = TaskService.Create(newItem);
                     ListTask.Add(newItem);
                     _items.Add(new DropItem { taskViewModel = newItem, Selector = ListStatus.FirstOrDefault(x => x.StatusId == newItem.StatusId).Title });
                     serverData.Add(new DropItem { taskViewModel = newItem, Selector = ListStatus.FirstOrDefault(x => x.StatusId == newItem.StatusId).Title });
                     container?.Refresh();
                     StateHasChanged();
-
                 }
 
             }
@@ -177,25 +170,20 @@ namespace Vs.Pm.Web.Pages.KanbanBoard
             {
                 var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.Medium };
                 var parameters = new DialogParameters<EditTask> { { x => x.TaskViewModel, item } };
-                parameters.Add(x => x.Title, "Edit Task");
                 var dialog = DialogService.Show<EditTask>("", parameters, options);
                 var result = await dialog.Result;
                 if (!result.Canceled)
                 {
-                    TaskViewModel returnModel = new TaskViewModel();
+                    TaskViewModel returnModel = new TaskViewModel();    
                     returnModel = (TaskViewModel)result.Data;
                     var newItem = TaskService.Update(returnModel);
                     var index = ListTask.FindIndex(x => x.TaskId == newItem.TaskId);
                     ListTask[index] = newItem;
-                    /*_items.Add(new DropItem { taskViewModel = newItem, Selector = ListStatus.FirstOrDefault(x => x.StatusId == newItem.StatusId).Title });*/
-
+                    _items.Add(new DropItem { taskViewModel = newItem, Selector = ListStatus.FirstOrDefault(x => x.StatusId == newItem.StatusId).Title });
                     serverData.Add(new DropItem { taskViewModel = newItem, Selector = ListStatus.FirstOrDefault(x => x.StatusId == newItem.StatusId).Title });
                     var oldItem = serverData.FirstOrDefault(x => x.taskViewModel.TaskId == newItem.TaskId);
                     serverData.Remove(oldItem);
-
-                    /*serverData.DistinctBy(i => i.taskViewModel.Title != _items.FirstOrDefault(x=>x.Selector == i.taskViewModel.Title));*/
-
-                    await LoadServerData();
+                    await UpdateData();
                     container?.Refresh();
                     StateHasChanged();
                 }
@@ -214,7 +202,7 @@ namespace Vs.Pm.Web.Pages.KanbanBoard
             }
         }
 
-        private async Task LoadServerData()
+        private async Task UpdateData()
         {
             try
             {
@@ -225,70 +213,52 @@ namespace Vs.Pm.Web.Pages.KanbanBoard
                     Selector = item.Selector
                 })
                 .ToList();
-                await RefreshContainer();
-            }
-            catch (Exception ex)
-            {
-                LogService.Create(LogModel, ex.Message, ex.StackTrace, ex.InnerException.Message, DateTime.Now);
-            }
-
-        }
-        private async Task RefreshContainer()
-        {
-            try
-            {
                 await InvokeAsync(StateHasChanged);
                 await Task.Delay(1);
-
                 container?.Refresh();
-
                 await Task.CompletedTask;
             }
             catch (Exception ex)
             {
                 LogService.Create(LogModel, ex.Message, ex.StackTrace, ex.InnerException.Message, DateTime.Now);
             }
+
         }
+        
         protected async void FilteredTask()
         {
-            ListTask = TaskService.FilteringEmploers(filterTask);
-            var i = 0;
+            ListTask = TaskService.FilteringEmploers(mFilterTask);
             serverData.Clear();
             foreach (var item in ListTask)
             {
                 var rez = new DropItem() { taskViewModel = item, Selector = ListStatus.FirstOrDefault(x => x.StatusId == item.StatusId).Title };
                 serverData.Add(rez);
-                i++;
             }
-            await LoadServerData();
+            await UpdateData();
             StateHasChanged();
         }
         protected async void FilteredProject()
         {
-            ListTask = TaskService.FilteringProject(filterProject);
-            var i = 0;
+            ListTask = TaskService.FilteringProject(mFilterProject);
             serverData.Clear();
             foreach (var item in ListTask)
             {
                 var rez = new DropItem() { taskViewModel = item, Selector = ListStatus.FirstOrDefault(x => x.StatusId == item.StatusId).Title };
                 serverData.Add(rez);
-                i++;
             }
-            await LoadServerData();
+            await UpdateData();
             StateHasChanged();
         }
         protected async void FilteredTaskTypes()
         {
-            ListTask = TaskService.FilteringTaskType(filterTaskType);
-            var i = 0;
+            ListTask = TaskService.FilteringTaskType(mFilterTaskType);
             serverData.Clear();
             foreach (var item in ListTask)
             {
                 var rez = new DropItem() { taskViewModel = item, Selector = ListStatus.FirstOrDefault(x => x.StatusId == item.StatusId).Title };
                 serverData.Add(rez);
-                i++;
             }
-            await LoadServerData();
+            await UpdateData();
             StateHasChanged();
         }
     }

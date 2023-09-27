@@ -13,7 +13,7 @@
                     </MudButton>
                 </h3>
             </div>
-            @if (Model != null)
+            @if (ListModel != null)
             {
                 <div class="col col-lg-2">
                     <input style="margin-left:60%" type="date" class="form-control-sm" placeholder="Search" @bind-value="@FilterDate" @bind-value:event="oninput" />
@@ -30,7 +30,7 @@
         </div>
     </div>
 
-    @if (Model == null)
+    @if (ListModel == null)
     {
         <MudGrid Justify="Justify.Center" Style="align-items: center; margin-top:250px;background-color:#FFDEAD">
             <MudProgressCircular Color="Color.Error" Size="Size.Large" Indeterminate="true" Style="position:absolute" />
@@ -38,7 +38,7 @@
     }
     else
     {
-        <MudTable Items="@Model" SortLabel="Sort" FixedHeader="true" Height="980px" Style="width: 90%; margin-left: 5%">
+        <MudTable Items="@ListModel" SortLabel="Sort" FixedHeader="true" Height="980px" Style="width: 90%; margin-left: 5%">
             <HeaderContent>
                 <MudTh>
                     <MudTableSortLabel SortBy="new Func<Data.ViewModel.LogApplicationViewModel, object>(x=>x.LogApplicationId)">

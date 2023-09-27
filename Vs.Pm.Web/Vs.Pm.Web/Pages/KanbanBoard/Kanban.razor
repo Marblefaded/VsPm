@@ -44,12 +44,13 @@
                         }
                     }
                 </MudSelect>
-                @* <MudButton @bind-value="@FilterTaskType" Style="margin-right:100%" OnClick="(()=>ClearInput())" Variant="Variant.Filled" Color="Color.Error">
-                    X
-                </MudButton> *@
+                
             </div>
-
-
+            <div class="col">
+                <MudButton @bind-value="@FilterTask" @bind-value:event="oninput" Style="margin-right:100%" OnClick="(()=>ClearFilters())" Variant="Variant.Filled" Color="Color.Error">
+                    X
+                </MudButton>
+            </div>
         </div>
     </div>
 
@@ -106,7 +107,11 @@
         dropItem.Item.Selector = dropItem.DropzoneIdentifier;
         var list1 = ListStatus.FirstOrDefault(x => x.Title == dropItem.Item.Selector);
         dropItem.Item.taskViewModel.StatusId = list1.StatusId;
-        SaveData(dropItem.Item.taskViewModel);
+        // SaveData(dropItem.Item.taskViewModel);
+        var newItem = TaskService.Update(dropItem.Item.taskViewModel);
+        var index = ListStatus.FindIndex(x => x.StatusId == newItem.StatusId);
+        ListTask[index] = newItem;
+        StateHasChanged();
     }
 
     protected override async void OnInitialized()

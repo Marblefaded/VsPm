@@ -105,9 +105,9 @@ namespace Vs.Pm.Pm.Db
             return (TEntity)result?.ToObject();
         }
 
-        public void TrackingSwitching(TEntity OldItem)
+        public void TrackingSwitching(TEntity oldItem)
         {
-            _context.Entry(OldItem).State = EntityState.Unchanged;
+            _context.Entry(oldItem).State = EntityState.Unchanged;
         }
 
         public TEntity Update(TEntity item, string operation = "")

@@ -22,7 +22,7 @@ namespace Vs.Pm.Web.Pages.TaskView
 
 
         public bool isRemove;
-        public string filterValue = "";
+        public string mFilterValue;
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
@@ -35,22 +35,22 @@ namespace Vs.Pm.Web.Pages.TaskView
 
         public string FilterValue
         {
-            get => filterValue;
+            get => mFilterValue;
 
             set
             {
-                filterValue = value;
+                mFilterValue = value;
                 Filter();
             }
         }
         protected void Filter()
         {
-            Model = Service.FilteringEmploers(filterValue);
+            Model = Service.FilteringEmploers(mFilterValue);
             StateHasChanged();
         }
         public void ClearInput()
         {
-            filterValue = "";
+            mFilterValue = "";
             Model = Service.GetAll();
             StateHasChanged();
         }
@@ -63,7 +63,6 @@ namespace Vs.Pm.Web.Pages.TaskView
 
                 var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.Medium };
                 var parameters = new DialogParameters<EditTask.EditTask> { { x => x.TaskViewModel, newItem } };
-                parameters.Add(x => x.Title, "Создание проживающего");
                 var dialog = DialogService.Show<EditTask.EditTask>("", parameters, options);
                 var result = await dialog.Result;
                 if (!result.Canceled)
@@ -87,7 +86,6 @@ namespace Vs.Pm.Web.Pages.TaskView
         {
             var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.Medium };
             var parameters = new DialogParameters<EditTask.EditTask> { { x => x.TaskViewModel, item } };
-            parameters.Add(x => x.Title, "Изменение проживающего");
             var dialog = DialogService.Show<EditTask.EditTask>("", parameters, options);
             var result = await dialog.Result;
             if (!result.Canceled)

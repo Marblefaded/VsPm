@@ -11,7 +11,7 @@ namespace Vs.Pm.Web.Pages.WorkingStatus.EditTaskType
         [Parameter]
         public TaskTypeViewModel TaskTypeViewModel { get; set; } = new TaskTypeViewModel();
         [Parameter]
-        public string Title { get; set; }
+        public string mTitle { get; set; }
         [Inject] protected TaskTypeService Service { get; set; }
         public void Cancel()
         {

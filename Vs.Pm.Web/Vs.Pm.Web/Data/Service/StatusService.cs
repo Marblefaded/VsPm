@@ -7,17 +7,17 @@ namespace Vs.Pm.Web.Data.Service
     public class StatusService
     {
         private static VsPmContext DbContext;
-        EFRepository<Status> repos;
+        EFRepository<Status> mRepoStatus;
 
         public StatusService(VsPmContext context)
         {
             DbContext = context;
-            repos = new EFRepository<Status>(context);
+            mRepoStatus = new EFRepository<Status>(context);
         }
         public List<StatusViewModel> GetAll()
         {
-            var list = repos.Get().ToList();
-            var result = list.Select(x => Convert(x)).ToList();
+            var list = mRepoStatus.Get().ToList();
+            var result = list.Select(Convert).ToList();
             foreach (var item in result)
             {
                 item.IsDeleteEnabled = DbContext.IsClaimDeleteEnabled(item.StatusId);
@@ -33,7 +33,7 @@ namespace Vs.Pm.Web.Data.Service
 
         public StatusViewModel ReloadItem(StatusViewModel item)
         {
-            var model = repos.Reload(item.StatusId);
+            var model = mRepoStatus.Reload(item.StatusId);
             if (model == null)
             {
                 return null;
@@ -43,37 +43,37 @@ namespace Vs.Pm.Web.Data.Service
 
         public void Delete(StatusViewModel item)
         {
-            var x = repos.FindById(item.StatusId);
-            repos.Remove(x);
+            var x = mRepoStatus.FindById(item.StatusId);
+            mRepoStatus.Remove(x);
         }
 
         public StatusViewModel Update(StatusViewModel item)
         {
-            var x = repos.FindByIdForReload(item.StatusId);
+            var model = mRepoStatus.FindByIdForReload(item.StatusId);
 
-            x.Title = item.Title;
-            x.OrderId = item.OrderId;
+            model.Title = item.Title;
+            model.OrderId = item.OrderId;
 
-            return Convert(repos.Update(x, item.Item.Timestamp));
+            return Convert(mRepoStatus.Update(model, item.Item.Timestamp));
         }
 
         public StatusViewModel Create(StatusViewModel item)
         {
-            var newItem = repos.Create(item.Item);
+            var newItem = mRepoStatus.Create(item.Item);
 
             return Convert(newItem);
         }
 
-        public List<StatusViewModel> FilteringEmploers(string y)
+        public List<StatusViewModel> FilteringEmploers(string filterValue)
         {
-            var filteredListRooms = repos.GetQuery().Where(x => (x.Title.StartsWith(y))).ToList();
+            var filteredListRooms = mRepoStatus.GetQuery().Where(x => (x.Title.StartsWith(filterValue))).ToList();
             var result = filteredListRooms.Select(Convert).ToList();
             return result;
         }
         public string GetName(int id)
         {
-            var x = repos.FindById(id);
-            return x.Title;
+            var model = mRepoStatus.FindById(id);
+            return model.Title;
         }
     }
 }

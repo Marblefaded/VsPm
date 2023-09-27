@@ -10,19 +10,19 @@ namespace Vs.Pm.Web.Pages
     {
         [Inject] protected IDialogService DialogService { get; set; }
         [Inject] private LogApplicationService LogService { get; set; }
-        protected List<LogApplicationViewModel> Model { get; set; }
+        protected List<LogApplicationViewModel> ListModel { get; set; }
         public LogApplicationViewModel LogModel = new LogApplicationViewModel();
 
-        public LogApplicationViewModel CurrentItem;
-        public DateTime filterDate;
-        public string filterError = "";
+        public LogApplicationViewModel mCurrentItem;
+        public DateTime mFilterDate;
+        public string mFilterError = "";
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
             {
                 FilterDate = DateTime.Now;
-                Model = await LogService.GetAll();
+                ListModel = await LogService.GetAll();
                 //ModelForClearing = await LogService.GetAll();
                 //Model.Reverse();
                 await InvokeAsync(StateHasChanged);
@@ -41,7 +41,7 @@ namespace Vs.Pm.Web.Pages
                 catch (ArgumentOutOfRangeException e)
                 {
                     //make sure this path does not exist
-                    if (Model.Contains(LogModel) == false)
+                    if (ListModel.Contains(LogModel) == false)
                     {
                         throw new FileNotFoundException("Error project. Destroy pc", e);
                     }
@@ -59,21 +59,21 @@ namespace Vs.Pm.Web.Pages
 
         public DateTime FilterDate
         {
-            get => filterDate;
+            get => mFilterDate;
 
             set
             {
-                filterDate = value;
+                mFilterDate = value;
                 FilterDateTime();
             }
         }
         public string FilterError
         {
-            get => filterError;
+            get => mFilterError;
 
             set
             {
-                filterError = value;
+                mFilterError = value;
                 FiltersError();
             }
         }
@@ -86,7 +86,7 @@ namespace Vs.Pm.Web.Pages
                 if (!result.Canceled)
                 {
                     LogService.Delete(item);
-                    Model.Remove(item);
+                    ListModel.Remove(item);
                 }
 
                 StateHasChanged();
@@ -100,19 +100,19 @@ namespace Vs.Pm.Web.Pages
 
         public async Task ClearInput()
         {
-            filterError = "";
-            Model = await LogService.GetAll();
+            mFilterError = "";
+            ListModel = await LogService.GetAll();
             StateHasChanged();
         }
 
         protected void FilterDateTime()
         {
-            Model = LogService.FilteringDate(filterDate);
+            ListModel = LogService.FilteringDate(mFilterDate);
             StateHasChanged();
         }
         protected void FiltersError()
         {
-            Model = LogService.FilteringError(filterError);
+            ListModel = LogService.FilteringError(mFilterError);
             StateHasChanged();
         }
 

@@ -18,7 +18,7 @@ namespace Vs.Pm.Web.Pages.TaskView.EditTask
         public List<TaskTypeViewModel> TaskTypeViewModel { get; set; } = new List<TaskTypeViewModel>();
         [Parameter]
         public string Title { get; set; }
-        [Inject] protected TaskService Service { get; set; }
+        [Inject] protected TaskService TaskService { get; set; }
         [Inject] protected StatusService StatusService { get; set; }
         [Inject] protected ProjectService ProjectService { get; set; }
         [Inject] protected TaskTypeService TaskTypeService { get; set; }

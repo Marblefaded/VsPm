@@ -5,7 +5,7 @@ namespace Vs.Pm.Web.Data.EditViewModel
     public class EditTaskViewModel
     {
         public bool IsConcurency { get; set; }
-        public TaskViewModel Item { get; set; }
+        public TaskViewModel TaskViewModel { get; set; }
         public List<TaskViewModel> Models { get; set; }
         public string ConcurencyErrorText { get; set; }
 

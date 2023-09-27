@@ -17,17 +17,17 @@ namespace Vs.Pm.Pm.Db
 
         }
 
-        public DbSet<LogApplicationError> DbSetLog { get; set; }
-        public DbSet<Project> DbSetProject { get; set; }
-        public DbSet<Status> DbSetStatus { get; set; }
-        public DbSet<TaskModel> DbSetTask { get; set; }
-        public DbSet<TaskType> DbSetTaskType { get; set;}
+        public DbSet<LogApplicationError> dbSetLog { get; set; }
+        public DbSet<Project> dbSetProject { get; set; }
+        public DbSet<Status> dbSetStatus { get; set; }
+        public DbSet<TaskModel> dbSetTask { get; set; }
+        public DbSet<TaskType> dbSetTaskType { get; set;}
 
         public bool IsClaimDeleteEnabled(int template)
         {
             var sql = $"SELECT * FROM Task WHERE StatusId = {template}";
 
-            var result = DbSetTask.FromSqlRaw(sql).Count();
+            var result = dbSetTask.FromSqlRaw(sql).Count();
             if (result == 0)
             {
                 return true;
@@ -43,7 +43,7 @@ namespace Vs.Pm.Pm.Db
         {
             var sql = $"SELECT * FROM Task WHERE TaskTypeId = {template}";
 
-            var result = DbSetTask.FromSqlRaw(sql).Count();
+            var result = dbSetTask.FromSqlRaw(sql).Count();
             if (result == 0)
             {
                 return true;
@@ -58,7 +58,7 @@ namespace Vs.Pm.Pm.Db
         {
             var sql = $"SELECT * FROM Task WHERE ProjectId = {template}";
 
-            var result = DbSetTask.FromSqlRaw(sql).Count();
+            var result = dbSetTask.FromSqlRaw(sql).Count();
             if (result == 0)
             {
                 return true;

@@ -7,16 +7,16 @@ namespace Vs.Pm.Web.Data.Service
     public class TaskTypeService
     {
         private static VsPmContext dbContext;
-        EFRepository<TaskType> repos;
+        EFRepository<TaskType> mRepoTaskType;
 
         public TaskTypeService(VsPmContext context)
         {
             dbContext = context;
-            repos = new EFRepository<TaskType>(context);
+            mRepoTaskType = new EFRepository<TaskType>(context);
         }
         public List<TaskTypeViewModel> GetAll()
         {
-            var list = repos.Get().ToList();
+            var list = mRepoTaskType.Get().ToList();
             var result = list.Select(Convert).ToList();
             foreach (var item in result)
             {
@@ -33,46 +33,46 @@ namespace Vs.Pm.Web.Data.Service
 
         public TaskTypeViewModel ReloadItem(TaskTypeViewModel item)
         {
-            var x = repos.Reload(item.TaskTypeId);
-            if (x == null)
+            var model = mRepoTaskType.Reload(item.TaskTypeId);
+            if (model == null)
             {
                 return null;
             }
-            return Convert(x);
+            return Convert(model);
         }
 
         public void Delete(TaskTypeViewModel item)
         {
-            var x = repos.FindById(item.TaskTypeId);
-            repos.Remove(x);
+            var model = mRepoTaskType.FindById(item.TaskTypeId);
+            mRepoTaskType.Remove(model);
         }
 
         public TaskTypeViewModel Update(TaskTypeViewModel item)
         {
-            var x = repos.FindByIdForReload(item.TaskTypeId);
+            var model = mRepoTaskType.FindByIdForReload(item.TaskTypeId);
 
-            x.Title = item.Title;
+            model.Title = item.Title;
             
-            return Convert(repos.Update(x, item.Item.Timestamp));
+            return Convert(mRepoTaskType.Update(model, item.Item.Timestamp));
         }
 
         public TaskTypeViewModel Create(TaskTypeViewModel item)
         {
-            var newItem = repos.Create(item.Item);
+            var newItem = mRepoTaskType.Create(item.Item);
 
             return Convert(newItem);
         }
 
-        public List<TaskTypeViewModel> FilteringEmploers(string y)
+        public List<TaskTypeViewModel> FilteringEmploers(string filterValue)
         {
-            var filteredListRooms = repos.GetQuery().Where(x => (x.Title.StartsWith(y))).ToList();
+            var filteredListRooms = mRepoTaskType.GetQuery().Where(x => (x.Title.StartsWith(filterValue))).ToList();
             var result = filteredListRooms.Select(Convert).ToList();
             return result;
         }
         public string GetName(int id)
         {
-            var x = repos.FindById(id);
-            return x.Title;
+            var model = mRepoTaskType.FindById(id);
+            return model.Title;
         }
     }
 }

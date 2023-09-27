@@ -10,11 +10,9 @@ namespace Vs.Pm.Web.Data.Service
     {
         EFRepository<LogApplicationError> mRepoLog;
 
-
         public LogApplicationService(VsPmContext context)
         {
             mRepoLog = new EFRepository<LogApplicationError>(context);
-            /*dbContext = context;//Исправить*/
         }
         public async Task<List<LogApplicationViewModel>> GetAll()
         {
@@ -39,13 +37,6 @@ namespace Vs.Pm.Web.Data.Service
             }
             return Convert(model);
         }
-
-        /*public void DeleteSelected()
-        {
-            var itemsToDelete = DbContext.DbSetLogApplication.Where(x => x.IsEnable == true);
-            DbContext.DbSetLogApplication.RemoveRange(itemsToDelete);
-            DbContext.SaveChanges();
-        }*/
 
         public void Delete(LogApplicationViewModel item)
         {
