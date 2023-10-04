@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Vs.Pm.Pm.Db.Models
 {
     [Table("Project")]
-    public class Project
+    public class Project:IChangeLog
     {
         [Key]
         public int ProjectId { get; set; }

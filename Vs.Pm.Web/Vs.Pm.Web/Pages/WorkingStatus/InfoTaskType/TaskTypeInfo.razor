@@ -1,0 +1,41 @@
+﻿@using System.Text.Json;
+@using Vs.Pm.Pm.Db;
+@using Vs.Pm.Web.Data.ViewModel;
+@inherits TaskTypeInfoView
+
+
+
+<MudDialog Style="width: 40%;">
+    <DialogContent>
+        <div style="margin-top:-24px;" class="d-flex justify-content-between">
+            <MudText Typo="Typo.h6">
+                @Title
+            </MudText>
+        </div>
+        <MudTable Elevation="14" Items="@ChangeLogModel" SortLabel="Sort" FixedHeader="true" Height="600px" Style="width: 90%; margin-left: 5%">
+            <HeaderContent>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Vs.Pm.Pm.Db.ChangeLog, object>(x=>x.Date)">
+                        Date
+                    </MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Vs.Pm.Pm.Db.ChangeLog, object>(x=>x.Operation)">
+                        Operation
+                    </MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                </MudTh>
+            </HeaderContent>
+            <RowTemplate Context="item">
+                <MudTd DataLabel="Date">@item.Date</MudTd>
+                <MudTd DataLabel="Operation">@item.Operation</MudTd>
+            </RowTemplate>
+        </MudTable>
+    </DialogContent>
+    <DialogActions>
+        <MudButton @onclick="Cancel" Variant="Variant.Filled" Color="Color.Primary">Cancel</MudButton>
+    </DialogActions>
+</MudDialog>
+
+

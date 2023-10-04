@@ -10,6 +10,7 @@ using Vs.Pm.Web.Data.Service;
 using Vs.Pm.Web.Data.ViewModel;
 using Vs.Pm.Web.Pages.KanbanBoard;
 using Vs.Pm.Web.Pages.TaskView.EditTask;
+using Vs.Pm.Web.Pages.TaskView.InfoTask;
 using static System.Collections.Specialized.BitVector32;
 
 namespace Vs.Pm.Web.Pages.KanbanBoard
@@ -116,7 +117,23 @@ namespace Vs.Pm.Web.Pages.KanbanBoard
                 FilteredTaskTypes();
             }
         }
-
+        public async void ChangeLogInfo(TaskViewModel item)
+        {
+            try
+            {
+                var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.Medium };
+                var parameters = new DialogParameters<TaskInfo> { { x => x.TaskViewModel, item } };
+                parameters.Add(x => x.Title, "TaskInfo");
+                var dialog = DialogService.Show<TaskInfo>("", parameters, options);
+                ListTask = TaskService.GetAll();
+                await UpdateData();
+                StateHasChanged();
+            }
+            catch (Exception ex)
+            {
+                LogService.Create(LogModel, ex.Message, ex.StackTrace, ex.InnerException.Message, DateTime.Now);
+            }
+        }
         public async Task ClearFilters()
         {
             mFilterTask = "";

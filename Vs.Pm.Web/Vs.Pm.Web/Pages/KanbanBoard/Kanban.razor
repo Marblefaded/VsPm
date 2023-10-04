@@ -51,6 +51,12 @@
                     X
                 </MudButton>
             </div>
+            <div class="col">
+                <p style="font-size:2rem">
+                    @DateTime.Now.ToString("dd MMMM yyyy")
+                </p>
+            </div>
+            
         </div>
     </div>
 
@@ -79,10 +85,39 @@
             <MudButton ButtonType="ButtonType.Submit" @onclick="(() => EditItemDialog(context.taskViewModel))">
 
                 <h8>
-                    <font color="#5F9EA0" style="margin-right:40%">
+                    @switch (GetType(context.taskViewModel.TaskTypeId))
+                    {
+                        case "New":
+                            <font color="#9ACD32" style="margin-right:40%">
 
-                        @GetType(context.taskViewModel.TaskTypeId)
-                    </font>
+                                @GetType(context.taskViewModel.TaskTypeId)
+                            </font>
+                            break;
+                        case "Bag":
+                            <font color="#FA8072" style="margin-right:40%">
+
+                                @GetType(context.taskViewModel.TaskTypeId)
+                            </font>
+                            break;
+                        case "Other":
+                            <font color="#ADD8E6" style="margin-right:40%">
+
+                                @GetType(context.taskViewModel.TaskTypeId)
+                            </font>
+                            break;
+                        case "Errors":
+                            <font color="#5F9EA0" style="margin-right:40%">
+
+                                @GetType(context.taskViewModel.TaskTypeId)
+                            </font>
+                            break;
+                        case "Changed":
+                            <font color="#F0E68C" style="margin-right:40%">
+
+                                @GetType(context.taskViewModel.TaskTypeId)
+                            </font>
+                            break;
+                    }
                 </h8>
                 <h5>
                     <font color="black">
@@ -92,7 +127,7 @@
                         @* <br /> *@
                     </font>
                 </h5>
-
+                <MudIconButton Icon="@Icons.Material.Filled.Outbound" Color="Color.Surface" @onclick="(() => ChangeLogInfo(context.taskViewModel))"></MudIconButton>
             </MudButton>
         </ItemRenderer>
     </MudDropContainer>

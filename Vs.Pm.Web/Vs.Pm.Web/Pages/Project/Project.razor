@@ -60,6 +60,9 @@
                             <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" aria-label="delete" @onclick="(() => DeleteItemAsync(item))"></MudIconButton>
                         </MudTooltip>
                     }
+                    <MudTooltip Text="Info">
+                        <MudIconButton Icon="@Icons.Material.Filled.Outbound" Color="Color.Surface" @onclick="(() => ChangeLogInfo(item))"></MudIconButton>
+                    </MudTooltip>
                 </MudTd>
             </RowTemplate>
             <PagerContent>

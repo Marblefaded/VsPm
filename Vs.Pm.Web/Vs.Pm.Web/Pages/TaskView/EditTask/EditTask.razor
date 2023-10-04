@@ -8,9 +8,9 @@
             <div style="border-bottom: 1px solid grey; padding-bottom: 15px;margin-top:-24px;" class="d-flex justify-content-between">
                 <MudButton Style="margin-right: 5%;" type="submit" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Success">Save</MudButton>
             </div>
-            <MudTextField Label="Title"
+            <MudTextField Label="Title" HelperText="Min. 2 characters"
             @bind-Value="TaskViewModel.Title" For="@(() => TaskViewModel.Title)" />
-            <MudTextField Label="Description"
+            <MudTextField Label="Description" HelperText="Min. 2 characters"
             @bind-Value="TaskViewModel.Description" For="@(() => TaskViewModel.Description)" />
             <MudSelect T="int" Label="ProjectId" Variant="Variant.Text" @bind-Value="TaskViewModel.ProjectId">
                 @if (ProjectViewModel != null)
@@ -39,7 +39,8 @@
                     }
                 }
             </MudSelect>
-            
+            <MudTextField Label="Hours" 
+            @bind-Value="TaskViewModel.Hours" For="@(() => TaskViewModel.Hours)" />
         </DialogContent>
     </MudDialog>
 </EditForm>

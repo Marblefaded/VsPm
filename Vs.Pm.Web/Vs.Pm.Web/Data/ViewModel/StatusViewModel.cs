@@ -25,7 +25,8 @@ namespace Vs.Pm.Web.Data.ViewModel
             get => _item.StatusId;
             set => _item.StatusId = value;
         }
-
+        [Required]
+        [MinLength(2)]
         public string Title
         {
             get => _item.Title;
@@ -37,7 +38,7 @@ namespace Vs.Pm.Web.Data.ViewModel
             get => _item.ChangeLogJson;
             set => _item.ChangeLogJson = value;
         }
-
+        [Required]
         public int OrderId
         {
             get => _item.OrderId;

@@ -5,6 +5,9 @@ using Vs.Pm.Web.Data.Service;
 using Vs.Pm.Web.Data.ViewModel;
 using Vs.Pm.Web.Shared;
 using System.Threading.Tasks;
+using Vs.Pm.Web.Pages.Project.Info;
+using Vs.Pm.Web.Pages.WorkingStatus.InfoTaskType;
+using Vs.Pm.Web.Pages.TaskView.InfoTask;
 
 namespace Vs.Pm.Web.Pages.WorkingStatus
 {
@@ -52,7 +55,22 @@ namespace Vs.Pm.Web.Pages.WorkingStatus
             Model = Service.GetAll();
             StateHasChanged();
         }
-
+        public async void ChangeLogInfo(TaskTypeViewModel item)
+        {
+            try
+            {
+                var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.Medium };
+                var parameters = new DialogParameters<TaskTypeInfo> { { x => x.TaskTypeViewModel, item } };
+                parameters.Add(x => x.Title,"TaskTypeInfo");
+                var dialog = DialogService.Show<TaskTypeInfo>("", parameters, options);
+                Model = Service.GetAll();
+                StateHasChanged();
+            }
+            catch (Exception ex)
+            {
+                LogService.Create(LogModel, ex.Message, ex.StackTrace, ex.InnerException.Message, DateTime.Now);
+            }
+        }
         public async Task AddItemDialog()
         {
             try

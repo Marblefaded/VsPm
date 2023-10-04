@@ -51,6 +51,7 @@ namespace Vs.Pm.Web.Data.Service
         {
             var x = mRepoProject.FindByIdForReload(item.ProjectId);
             x.Title = item.Title;
+            
 
             return Convert(mRepoProject.Update(x, item.Item.Timestamp));
         }

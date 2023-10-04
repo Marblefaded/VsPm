@@ -26,7 +26,8 @@ namespace Vs.Pm.Web.Data.ViewModel
             get => _item.ProjectId;
             set => _item.ProjectId = value;
         }
-
+        [Required]
+        [MinLength(2)]
         public string Title
         {
             get => _item.Title;

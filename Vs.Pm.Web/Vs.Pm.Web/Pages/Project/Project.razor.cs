@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using Vs.Pm.Pm.Db;
 using Vs.Pm.Web.Data.EditViewModel;
 using Vs.Pm.Web.Data.Service;
 using Vs.Pm.Web.Data.ViewModel;
 using Vs.Pm.Web.Pages.Project.EditProject;
+using Vs.Pm.Web.Pages.Project.Info;
 using Vs.Pm.Web.Shared;
 
 namespace Vs.Pm.Web.Pages
@@ -95,6 +97,8 @@ namespace Vs.Pm.Web.Pages
                 {
                     ProjectViewModel returnModel = new ProjectViewModel();
                     returnModel = (ProjectViewModel)result.Data;
+                    
+                    
                     var newItem = Service.Update(returnModel);
                     var index = Model.FindIndex(x => x.ProjectId == newItem.ProjectId);
                     Model[index] = newItem;
@@ -111,6 +115,23 @@ namespace Vs.Pm.Web.Pages
                 }
             }
             catch(Exception ex)
+            {
+                LogService.Create(LogModel, ex.Message, ex.StackTrace, ex.InnerException.Message, DateTime.Now);
+            }
+        }
+
+        public async void ChangeLogInfo(ProjectViewModel item)
+        {
+            try
+            {
+                var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.Medium };
+                var parameters = new DialogParameters<ProjectInfo> { { x => x.ProjectViewModel, item } };
+                parameters.Add(x => x.Title, "ProjectInfo");
+                var dialog = DialogService.Show<ProjectInfo>("", parameters, options);
+                Model = Service.GetAll();
+                StateHasChanged();
+            }
+            catch (Exception ex)
             {
                 LogService.Create(LogModel, ex.Message, ex.StackTrace, ex.InnerException.Message, DateTime.Now);
             }

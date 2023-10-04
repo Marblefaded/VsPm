@@ -54,6 +54,7 @@ namespace Vs.Pm.Web.Data.Service
             model.ProjectId = item.ProjectId;
             model.StatusId = item.StatusId;
             model.TaskTypeId = item.TaskTypeId;
+            model.Hours = item.Hours;
 
             return Convert(mRepoTask.Update(model, item.Item.Timestamp));
         }

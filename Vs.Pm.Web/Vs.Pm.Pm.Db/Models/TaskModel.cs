@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Vs.Pm.Pm.Db.Models
 {
     [Table("Task")]
-    public class TaskModel
+    public class TaskModel : IChangeLog
     {
         [Key]
         public int TaskId { get; set; }
@@ -23,6 +23,7 @@ namespace Vs.Pm.Pm.Db.Models
         public int StatusId { get; set; }
         public int TaskTypeId { get; set; }
         public string Description { get; set; }
+        public TimeSpan? Hours { get; set; }
 
     }
 }

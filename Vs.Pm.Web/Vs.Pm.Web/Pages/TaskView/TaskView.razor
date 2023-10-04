@@ -59,6 +59,11 @@
                         TaskTypeId
                     </MudTableSortLabel>
                 </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Data.ViewModel.TaskViewModel, object>(x=>x.Hours)">
+                        Hours/minutes
+                    </MudTableSortLabel>
+                </MudTh>
                 <MudTh></MudTh>
             </HeaderContent>
             <RowTemplate Context="item">
@@ -68,6 +73,7 @@
                 <MudTd DataLabel="ProjectId">@(GetStatusNameP(item.ProjectId))</MudTd>
                 <MudTd DataLabel="StatusId">@(GetStatusNameS(item.StatusId))</MudTd>
                 <MudTd DataLabel="TaskTypeId">@(GetStatusNameT(item.TaskTypeId))</MudTd>
+                <MudTd DataLabel="Hours">@item?.Hours</MudTd>
                 <MudTd>
                     <MudTooltip Text="Edit">
                         <MudIconButton Icon="@Icons.Material.Outlined.Edit" Color="Color.Surface" @onclick="(() => EditItemDialog(item))"></MudIconButton>
@@ -75,6 +81,9 @@
                     <MudTooltip Text="Delete">
                         <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" aria-label="delete" @onclick="(() => DeleteItemAsync(item))"></MudIconButton>
                     </MudTooltip>
+                        <MudTooltip Text="Info">
+                            <MudIconButton Icon="@Icons.Material.Filled.Outbound" Color="Color.Surface" @onclick="(() => ChangeLogInfo(item))"></MudIconButton>
+                        </MudTooltip>
                 </MudTd>
             </RowTemplate>
             <PagerContent>

@@ -110,21 +110,6 @@ namespace Vs.Pm.Pm.Db
             _context.Entry(oldItem).State = EntityState.Unchanged;
         }
 
-        public TEntity Update(TEntity item, string operation = "")
-        {
-            if (item is IChangeLog)
-            {
-                FillChangeLogJson((IChangeLog)item, operation);
-            }
-
-            _context.Entry(item).State = EntityState.Modified;
-            _context.SaveChanges();
-
-            _context.Entry(item).State = EntityState.Detached;
-            _context.SaveChanges();
-
-            return item;
-        }
 
         public TEntity Update(TEntity item, byte[] rowversion, string operation = "")
         {
@@ -132,7 +117,7 @@ namespace Vs.Pm.Pm.Db
             {
                 _context.Entry(item).OriginalValues["RowVersion"] = rowversion;
             }
-
+            
             if (item is IChangeLog)
             {
                 FillChangeLogJson((IChangeLog)item, operation);
@@ -169,12 +154,11 @@ namespace Vs.Pm.Pm.Db
             changeLogJson.Add(new ChangeLog()
             {
                 Operation = String.IsNullOrEmpty(operation) ? "Update" : operation,
-                User = _user,
                 Date = DateTime.Now
             });
             item.ChangeLogJson = JsonSerializer.Serialize(changeLogJson);
 
-            while (item.ChangeLogJson.Length > 4000)
+            while (item.ChangeLogJson.Length > 400)
             {
                 var firstRecord = changeLogJson.First();
                 changeLogJson.Remove(firstRecord);

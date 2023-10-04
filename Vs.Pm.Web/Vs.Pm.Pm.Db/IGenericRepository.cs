@@ -10,7 +10,6 @@
         IEnumerable<TEntity> Take(int count);
         IEnumerable<TEntity> Take(int count, Func<TEntity, bool> predicate);
         void Remove(TEntity item);
-        TEntity Update(TEntity item, string operation = "");
         void SetUserNameForLog(string user);
     }
 }

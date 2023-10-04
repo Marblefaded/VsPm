@@ -3,6 +3,8 @@ using MudBlazor;
 using Vs.Pm.Web.Data.EditViewModel;
 using Vs.Pm.Web.Data.Service;
 using Vs.Pm.Web.Data.ViewModel;
+using Vs.Pm.Web.Pages.DashBoardStatus.InfoStatus;
+using Vs.Pm.Web.Pages.Project.Info;
 using Vs.Pm.Web.Pages.WorkingStatus.EditTaskType;
 using Vs.Pm.Web.Shared;
 
@@ -52,7 +54,22 @@ namespace Vs.Pm.Web.Pages.DashBoardStatus
             Model = Service.GetAll();
             StateHasChanged();
         }
-
+        public async void ChangeLogInfo(StatusViewModel item)
+        {
+            try
+            {
+                var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.Medium };
+                var parameters = new DialogParameters<StatusInfo> { { x => x.StatusViewModel, item } };
+                parameters.Add(x => x.Title, "StatusInfo");
+                var dialog = DialogService.Show<StatusInfo>("", parameters, options);
+                Model = Service.GetAll();
+                StateHasChanged();
+            }
+            catch (Exception ex)
+            {
+                LogService.Create(LogModel, ex.Message, ex.StackTrace, ex.InnerException.Message, DateTime.Now);
+            }
+        }
         public async Task AddItemDialog()
         {
             try

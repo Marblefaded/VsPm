@@ -25,7 +25,8 @@ namespace Vs.Pm.Web.Data.ViewModel
             get => _item.TaskTypeId;
             set => _item.TaskTypeId = value;
         }
-
+        [Required]
+        [MinLength(2)]
         public string Title
         {
             get => _item.Title;
