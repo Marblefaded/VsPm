@@ -1,0 +1,168 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,500;0,600;1,500;1,600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@1,500&display=swap');
+
+
+
+.content {
+    height: 100vh;
+    background-color: #f7f7f7;
+    padding-top: 0px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+
+
+.logo {
+    position: absolute;
+    top: 10%;
+    font-weight: 600 !important;
+    padding: 10px 35px;
+    font-size: 33px;
+    color: #505166;
+    cursor:default;
+    z-index: 1;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.alfa--lofin {
+    background-color: white;
+    box-shadow: 0 4px 20px rgb(0 0 0 / 14%);
+    border-radius: .25rem;
+    padding: 36px 36px 18px 36px;
+    width: 420px;
+    z-index: 1;
+}
+
+.alfa--lofin h1 {
+    color: rgba(17,17,46,.7);
+    font-size: 24px;
+    font-weight: 600 !important;
+    text-align: center;
+    margin-bottom: 35px;
+    line-height: 1.5;
+    cursor: default;
+}
+
+.alfa--lofin input {
+    height: 46px;
+    padding-left: 48px;
+    padding-right: 16px;
+    border: none;
+}
+
+.alfa--input {
+    border: 1px solid #b1b1b3;
+    border-radius: .25rem;
+    transition: all .2s;
+}
+
+.alfa--input:hover {
+    border-color: #8d8d8f;
+}
+
+.alfa--lofin .bi--left--input {
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+    left: 12px;
+    z-index: 100;
+}
+
+.alfa--lofin input[type=button] {
+    background-color: #3498db;
+    color: white;
+    border-radius: 8px;
+    padding: 10px 45px;
+    border: none;
+    box-shadow: none;
+    font-size: 16px;
+    margin-top: 25px;
+    transition: all .2s;
+    font-weight: bold;
+}
+
+.alfa--lofin input[type=button]:hover {
+    background-color: #268fd6;
+}
+
+.fadableMsg {
+    font-weight: bold;
+    font-size: 14px;
+    color: #ff405c;
+    margin-bottom: -10px;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+    -moz-transition: opacity 1.5s ease-in-out;
+    -webkit-transition: opacity 1.5s ease-in-out;
+}
+
+.fadeIn {
+    opacity: 1;
+}
+
+@keyframes shake {
+    10%, 90% {
+        transform: translate3d(-1px, 0, 0);
+    }
+
+    20%, 80% {
+        transform: translate3d(2px, 0, 0);
+    }
+
+    30%, 50%, 70% {
+        transform: translate3d(-4px, 0, 0);
+    }
+
+    40%, 60% {
+        transform: translate3d(4px, 0, 0);
+    }
+}
+
+.invalid-shake {
+    animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+}
+.invalid-border{
+    border: 1px solid #ff405c !important;
+}
+
+.parrent-loader{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.login-loader-content{
+    position: absolute;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: conic-gradient(lightgray, transparent);
+    animation: rotating 1s linear infinite;
+    top: 44%;
+}
+
+.login-loader{
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #3498db;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@-webkit-keyframes rotating {
+    from{
+        transform: rotate(360deg);
+    }
+    to{
+        transform: rotate(0deg);
+    }
+}
+

@@ -22,6 +22,22 @@ namespace Vs.Pm.Pm.Db
         public DbSet<Status> dbSetStatus { get; set; }
         public DbSet<TaskModel> dbSetTask { get; set; }
         public DbSet<TaskType> dbSetTaskType { get; set;}
+        public DbSet<User> dbSetUser { get; set; }
+
+        public User Login(string name, string pass)
+        {
+            var users = GetAllUsers();
+            return users.SingleOrDefault(r => r.Login.ToLower() == name.ToLower() && r.Password == pass);
+        }
+
+        public List<User> GetAllUsers()
+        {
+            var sql = @"Select * from User";
+
+            var result = dbSetUser.ToList();
+            return result;
+        }
+
 
         public bool IsClaimDeleteEnabled(int template)
         {

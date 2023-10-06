@@ -1,5 +1,12 @@
 ﻿@page "/"
 @using System.Globalization;
+@page "/{token}"
+@using Microsoft.AspNetCore.Http;
+@using Vs.Pm.Web.Data.SharedService;
+@inject SecurityService service
+@inject IHttpContextAccessor _httpContextAccessor
+@inject NavigationManager UriHelper
+
 <body style="background-color:#FFF8DC">
 
 <br />
@@ -27,3 +34,39 @@
         </p>
     </div>
 </body>
+@code{
+    [CascadingParameter]
+    Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    [Parameter]
+    public string token { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        var authState = await authenticationStateTask;
+        var user = authState.User;
+        if (!user.Identity.IsAuthenticated)
+        {
+
+            var uriBuilder = new UriBuilder(UriHelper.Uri);
+            var q = System.Web.HttpUtility.ParseQueryString(uriBuilder.Query);
+            var token = q["token"];
+
+            string challengeUri;
+            if (!String.IsNullOrEmpty(token))
+            {
+                challengeUri = "Account/LoginByToken?token=" + token;
+            }
+            else
+            {
+                challengeUri = "login";
+            }
+            UriHelper.NavigateTo(UriHelper.BaseUri + challengeUri, true);
+        }
+        else
+        {
+            //UriHelper.NavigateTo(UriHelper.BaseUri + "MailingListeCorona", true);
+        }
+    }
+
+}

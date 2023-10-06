@@ -53,6 +53,8 @@ namespace Vs.Pm.Web.Pages.KanbanBoard
         [Inject] protected StatusService Service { get; set; }
         [Inject] protected TaskTypeService TaskTypeService { get; set; }
         [Inject] protected ProjectService ProjectService { get; set; }
+        [Inject] protected TaskService TaskService { get; set; }
+        [Inject] private LogApplicationService LogService { get; set; }
 
         public List<ProjectViewModel> ListProject = new();
 
@@ -66,11 +68,6 @@ namespace Vs.Pm.Web.Pages.KanbanBoard
         public List<ProjectViewModel> ProjectViewModel { get; set; } = new List<ProjectViewModel>();
 
         public MudDropContainer<DropItem> container;
-        /*[Inject] public KanbanHub KanbanHubContext { get; set; }*/
-
-        [Inject] protected TaskService TaskService { get; set; }
-
-        [Inject] private LogApplicationService LogService { get; set; }
 
         public LogApplicationViewModel LogModel = new LogApplicationViewModel();
 

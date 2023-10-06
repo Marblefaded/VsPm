@@ -1,0 +1,51 @@
+﻿@page "/login"
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = null;
+}
+
+<link rel="stylesheet" href="~/css/login.css"/>
+<script src="~/lib/jquery/jquery.min.js"></script>
+<script src="~/js/login.js"></script>
+<link rel="stylesheet" href="~/css/bootstrap/bootstrap.min.css" />
+<link rel="stylesheet" href="~/css/site.css" />
+
+<div class="content">
+    <div class="logo">AMS-Teilnehmer</div>
+    <div class="alfa--lofin">
+        <h1>Einloggen</h1>
+        <form class="form-group" id="formlogin" method="post" asp-action="Login" asp-controller="Account">
+            <div id="login" class="form-group alfa--input position-relative">
+                <div id="loginId" class="bi--left--input">
+                    <svg xmlns="http://www.w3.org/2000/svg" color="#7c7c8c" width="24" height="24" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                        <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+                    </svg>
+                </div>
+                <input class="form-control row" name="name" type="text" placeholder="Login" />
+            </div>
+            <div id="password" class="form-group alfa--input position-relative">
+                <div id="passwordId" class="bi--left--input">
+                    <svg xmlns="http://www.w3.org/2000/svg" color="#7c7c8c" width="24" height="24" fill="currentColor" class="bi bi-lock-fill" viewBox="0 0 16 16">
+                        <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z" />
+                    </svg>
+                </div>
+                <input class="form-control row" name="password" type="password" placeholder="Password" />
+            </div>
+            <div class="form-group text-left fadableMsg" id="divmessage"></div>
+            <div class="form-group text-center parrent-loader">
+                <input type="button" id="btnLogin" class="btn row" value="Anmelden" onclick="javascript: UserLoginValidation();" style="width: 158px;" />
+                <div id="loader" class="login-loader-content" style="visibility: hidden">
+                    <div class="login-loader">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+
