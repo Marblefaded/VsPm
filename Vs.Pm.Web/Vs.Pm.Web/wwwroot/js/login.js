@@ -27,7 +27,7 @@ var UserLoginValidation = function() {
                 $("#loader").css("visibility", "hidden");
             }
             else {
-                window.location.href = window.location.origin;
+                window.location.href = window.location.origin + "/Pm";
             }
         }
     });

@@ -6,35 +6,26 @@
 @inject SecurityService service
 @inject IHttpContextAccessor _httpContextAccessor
 @inject NavigationManager UriHelper
-
-<body style="background-color:#FFF8DC">
-
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-    <br />
-    <br />
-    <br />
-    <div style="font-size: 4rem">
-        <p class="text-center">Welcome to PM project by VS!</p>
-    </div>
-    <br/>
-    <br/>
-    <div style="font-size: 3rem">
-        <p class="text-center">
-            @DateTime.Now.ToString("dddd, dd MMMM yyyy")
-        </p>
-    </div>
-</body>
-@code{
+<AuthorizeView Roles="Admin, User">
+    <Authorized>
+        <body style="background-color:#FFF8DC">
+            <div style="font-size: 4rem; align-content: center;">
+                <p class="text-center">Welcome to PM project by VS!</p>
+            </div>
+            <br />
+            <br />
+            <div style="font-size: 3rem">
+                <p class="text-center">
+                    @DateTime.Now.ToString("dddd, dd MMMM yyyy")
+                </p>
+            </div>
+        </body>
+    </Authorized>
+    <NotAuthorized>
+        <RedirectLogin />
+    </NotAuthorized>
+</AuthorizeView>
+@code {
     [CascadingParameter]
     Task<AuthenticationState> authenticationStateTask { get; set; }
 
