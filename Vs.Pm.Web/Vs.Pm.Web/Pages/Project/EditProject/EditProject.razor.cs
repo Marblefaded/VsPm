@@ -12,7 +12,7 @@ namespace Vs.Pm.Web.Pages.Project.EditProject
         public ProjectViewModel ProjectViewModel { get; set; } = new ProjectViewModel();
         [Parameter]
         public string mTitle { get; set; }
-        [Inject] protected ProjectService Service { get; set; }
+       
         public void Cancel()
         {
             MudDialog.Cancel();

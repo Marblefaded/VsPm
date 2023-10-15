@@ -1,6 +1,8 @@
 ﻿using Vs.Pm.Pm.Db.Models;
 using Vs.Pm.Pm.Db;
 using Vs.Pm.Web.Data.ViewModel;
+using Microsoft.AspNetCore.Http;
+using Vs.Pm.Web.Pages.Users;
 
 namespace Vs.Pm.Web.Data.Service
 {
@@ -8,11 +10,21 @@ namespace Vs.Pm.Web.Data.Service
     {
         private static VsPmContext DbContext;
         EFRepository<Status> mRepoStatus;
+        private string _user;
 
-        public StatusService(VsPmContext context)
+        public StatusService(VsPmContext context, IHttpContextAccessor httpContextAccessor)
         {
+            if (httpContextAccessor != null && httpContextAccessor.HttpContext != null && httpContextAccessor.HttpContext.User != null)
+            {
+                string user = httpContextAccessor?.HttpContext?.User?.Identity?.Name ?? "";
+                var index = user.IndexOf("@");
+                if (index > 0)
+                {
+                    _user = user.Substring(0, index);
+                }
+            }
             DbContext = context;
-            mRepoStatus = new EFRepository<Status>(context);
+            mRepoStatus = new EFRepository<Status>(context,_user);
         }
         public List<StatusViewModel> GetAll()
         {

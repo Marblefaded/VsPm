@@ -23,11 +23,17 @@
                     </MudTableSortLabel>
                 </MudTh>
                 <MudTh>
+                    <MudTableSortLabel SortBy="new Func<Vs.Pm.Pm.Db.ChangeLog, object>(x=>x.User)">
+                        User
+                    </MudTableSortLabel>
+                </MudTh>
+                <MudTh>
                 </MudTh>
             </HeaderContent>
             <RowTemplate Context="item">
                 <MudTd DataLabel="Date">@item.Date</MudTd>
                 <MudTd DataLabel="Operation">@item.Operation</MudTd>
+                <MudTd DataLabel="User">@item.User</MudTd>
             </RowTemplate>
         </MudTable>
     </DialogContent>

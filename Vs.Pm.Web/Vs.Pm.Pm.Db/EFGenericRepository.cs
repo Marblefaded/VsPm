@@ -154,6 +154,7 @@ namespace Vs.Pm.Pm.Db
             changeLogJson.Add(new ChangeLog()
             {
                 Operation = String.IsNullOrEmpty(operation) ? "Update" : operation,
+                User = _user,
                 Date = DateTime.Now
             });
             item.ChangeLogJson = JsonSerializer.Serialize(changeLogJson);

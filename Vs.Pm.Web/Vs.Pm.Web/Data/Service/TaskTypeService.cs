@@ -1,6 +1,7 @@
 ﻿using Vs.Pm.Pm.Db;
 using Vs.Pm.Pm.Db.Models;
 using Vs.Pm.Web.Data.ViewModel;
+using Vs.Pm.Web.Pages.Users;
 
 namespace Vs.Pm.Web.Data.Service
 {
@@ -8,11 +9,21 @@ namespace Vs.Pm.Web.Data.Service
     {
         private static VsPmContext dbContext;
         EFRepository<TaskType> mRepoTaskType;
+        private string _user;
 
-        public TaskTypeService(VsPmContext context)
+        public TaskTypeService(VsPmContext context, IHttpContextAccessor httpContextAccessor)
         {
+            if (httpContextAccessor != null && httpContextAccessor.HttpContext != null && httpContextAccessor.HttpContext.User != null)
+            {
+                string user = httpContextAccessor?.HttpContext?.User?.Identity?.Name ?? "";
+                var index = user.IndexOf("@");
+                if (index > 0)
+                {
+                    _user = user.Substring(0, index);
+                }
+            }
             dbContext = context;
-            mRepoTaskType = new EFRepository<TaskType>(context);
+            mRepoTaskType = new EFRepository<TaskType>(context, _user);
         }
         public List<TaskTypeViewModel> GetAll()
         {

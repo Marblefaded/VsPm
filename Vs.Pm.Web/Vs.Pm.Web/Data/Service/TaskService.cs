@@ -2,6 +2,8 @@
 using Vs.Pm.Pm.Db;
 using Vs.Pm.Web.Data.ViewModel;
 using TaskModel = Vs.Pm.Pm.Db.Models.TaskModel;
+using Microsoft.AspNetCore.Http;
+using Vs.Pm.Web.Pages.Users;
 
 namespace Vs.Pm.Web.Data.Service
 {
@@ -9,11 +11,21 @@ namespace Vs.Pm.Web.Data.Service
     {
         private static VsPmContext DbContext;
         EFRepository<TaskModel> mRepoTask;
+        private string _user;
 
-        public TaskService(VsPmContext context)
+        public TaskService(VsPmContext context, IHttpContextAccessor httpContextAccessor)
         {
+            if (httpContextAccessor != null && httpContextAccessor.HttpContext != null && httpContextAccessor.HttpContext.User != null)
+            {
+                string user = httpContextAccessor?.HttpContext?.User?.Identity?.Name ?? "";
+                var index = user.IndexOf("@");
+                if (index > 0)
+                {
+                    _user = user.Substring(0, index);
+                }
+            }
             DbContext = context;
-            mRepoTask = new EFRepository<TaskModel>(context);
+            mRepoTask = new EFRepository<TaskModel>(context, _user);
         }
         public List<TaskViewModel> GetAll()
         {

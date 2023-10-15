@@ -72,7 +72,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 app.UseAuthorization();
-
+app.UseAuthentication();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 app.MapControllerRoute("default", "{controller=Account}/{action=Index}/{id?}");
