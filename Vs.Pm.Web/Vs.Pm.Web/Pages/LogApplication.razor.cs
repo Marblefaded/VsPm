@@ -10,6 +10,7 @@ namespace Vs.Pm.Web.Pages
     {
         [Inject] protected IDialogService DialogService { get; set; }
         [Inject] private LogApplicationService LogService { get; set; }
+        [Inject] protected IServiceScopeFactory ScopeFactory { get; set; }
         protected List<LogApplicationViewModel> ListModel { get; set; }
         public LogApplicationViewModel LogModel = new LogApplicationViewModel();
 
@@ -31,28 +32,29 @@ namespace Vs.Pm.Web.Pages
 
         public void PushError()
         {
-            try
+            for(int i = 0; i < 1000; i++)
             {
                 try
                 {
-                    throw new ArgumentOutOfRangeException();
-                }
-
-                catch (ArgumentOutOfRangeException e)
-                {
-                    //make sure this path does not exist
-                    if (ListModel.Contains(LogModel) == false)
+                    try
                     {
-                        throw new FileNotFoundException("Error project. Destroy pc", e);
+                        throw new ArgumentOutOfRangeException();
+                    }
+                    catch (ArgumentOutOfRangeException e)
+                    {
+                        if (ListModel.Contains(LogModel) == false)
+                        {
+                            throw new FileNotFoundException("Error project. Destroy pc", e);
+                        }
                     }
                 }
-            }
 
-            catch (Exception e)
-            {
-                if (e.InnerException != null)
+                catch (Exception e)
                 {
-                    LogService.Create(LogModel, e.Message, e.StackTrace, e.InnerException.StackTrace, DateTime.Now);
+                    if (e.InnerException != null)
+                    {
+                        LogService.Create(LogModel, e.Message, e.StackTrace, e.InnerException.StackTrace, DateTime.Now);
+                    }
                 }
             }
         }
@@ -115,6 +117,69 @@ namespace Vs.Pm.Web.Pages
             ListModel = LogService.FilteringError(mFilterError);
             StateHasChanged();
         }
+
+        public async Task Generator1k()
+        {
+            var GeneratorList = new List<LogApplicationViewModel>();
+            var date = DateTime.Now;
+            for (int i = 0; i < 1000; i++)
+            {
+                var GeneratorItem = new LogApplicationViewModel();
+                {
+                    GeneratorItem.LogApplicationId = i;
+                    GeneratorItem.ErrorMessage = "Generated";
+                    GeneratorItem.ErrorContext = "Generated";
+                    GeneratorItem.ErrorInnerException = "Generated";
+                    GeneratorItem.Date= date;
+                };
+                if (i % 1000 == 0)
+                {
+                    date = date.AddDays(-1);
+                }
+                GeneratorList.Add(GeneratorItem);
+            }
+            using (var scope = this.ScopeFactory.CreateScope())
+            {
+                var service = scope.ServiceProvider.GetService<LogApplicationService>();
+                var newList = service.CreateDate(GeneratorList);
+                ListModel.AddRange(newList);
+            }
+            await InvokeAsync(StateHasChanged);
+        }
+        
+
+        public void Clear()
+        {
+            ListModel.Clear();
+            LogService.ClearAll();
+        }
+
+        /*DECLARE @CounterX INT = 1
+DECLARE @CounterY Int = 1
+DECLARE @Date DATE = '2023-10-18' 
+
+WHILE @CounterY <= 10
+BEGIN
+
+
+WHILE @CounterX <= 1000
+BEGIN
+    INSERT INTO[dbo].LogApplicationError(InsertDate, ErrorContext, ErrorMessage, ErrorInnerException)
+    VALUES(@Date, 'Qqqqqq', 'Qqqqqq', 'Qqqqqq' );
+
+        SET @CounterX = @CounterX + 1
+END
+
+SET @Date = DATEADD(day, 1, @Date);
+        SET @CounterY = @CounterY + 1
+END
+
+
+SELECT[l].[LogApplicationErrorId], [l].[ErrorContext], [l].[ErrorInnerException], [l].[ErrorMessage], [l].[InsertDate]
+        FROM[LogApplicationError] AS[l] where ErrorContext like '%Q%'-- and(InsertDate >= '2023-10-01' and InsertDate < '2023-10-20')
+
+TRUNCATE TABLE[dbo].LogApplicationError*/
+
 
     }
 }

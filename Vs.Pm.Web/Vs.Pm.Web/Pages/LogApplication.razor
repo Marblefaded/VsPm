@@ -1,8 +1,8 @@
 ﻿@page "/system"
 @using MudBlazor
 @inherits LogApplicationView
-<AuthorizeView Roles="Admin">
-    <Authorized>
+@* <AuthorizeView Roles="Admin">
+    <Authorized> *@
     <body style="background-color:#FFF8DC">
         <div class="сontainer">
             <div class="row">
@@ -13,6 +13,12 @@
                             Press me
                         </MudButton>
                     </h3>
+                        <div class="col col-lg-1">
+                            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Outlined.Add" Color="Color.Error" @onclick="(() => Generator1k())">1k</MudButton>
+                        </div>
+                        <div class="col col-lg-1">
+                            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Outlined.Add" Color="Color.Error" @onclick="(() => Clear())">Clear</MudButton>
+                        </div>
                 </div>
                 @if (ListModel != null)
                 {
@@ -82,11 +88,11 @@
         }
 
     </body>
-    </Authorized>
+@*     </Authorized>
     <NotAuthorized>
         <RedirectLogin />
     </NotAuthorized>
-</AuthorizeView>
+</AuthorizeView> *@
 @code {
     private bool dense = false;
     private bool hover = true;

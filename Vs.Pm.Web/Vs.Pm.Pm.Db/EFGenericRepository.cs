@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EFCore.BulkExtensions;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -131,7 +132,31 @@ namespace Vs.Pm.Pm.Db
 
             return item;
         }
+        public List<TEntity> CreateBulk(List<TEntity> list, string operation = "")
+        {
+            var bulkConfig = new BulkConfig
+            { SetOutputIdentity = true, BatchSize = 4000, DoNotUpdateIfTimeStampChanged = true, TrackingEntities = false };
 
+            using (var transaction = _context.Database.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted))
+            {
+                _context.ChangeTracker.Clear();
+
+                //list.ForEach(item => { FillChangeLogJson(item.GetType().GetProperty("ChangeLogJson"), operation); });
+
+                _context.BulkInsertOrUpdate(list, bulkConfig);
+
+                if (bulkConfig.TimeStampInfo?.NumberOfSkippedForUpdate > 0)
+                {
+                    transaction.Rollback();
+                    throw new DbUpdateConcurrencyException();
+                }
+                else
+                {
+                    transaction.Commit();
+                }
+                return list;
+            }
+        }
         public void Remove(TEntity item)
         {
             try

@@ -38,6 +38,10 @@ namespace Vs.Pm.Pm.Db
             return result;
         }
 
+        public void GenerateLog() 
+        {
+            var sql = "";
+        }
 
         public bool IsClaimDeleteEnabled(int template)
         {

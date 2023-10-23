@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Vs.Pm.Pm.Db;
 using Vs.Pm.Pm.Db.Models;
+using Vs.Pm.Web.Data.EditViewModel;
 using Vs.Pm.Web.Data.ViewModel;
 using Vs.Pm.Web.Pages.Users;
+using static MudBlazor.CategoryTypes;
 
 namespace Vs.Pm.Web.Data.Service
 {
@@ -59,13 +62,28 @@ namespace Vs.Pm.Web.Data.Service
             mRepoProject.Remove(x);
         }
 
-        public ProjectViewModel Update(ProjectViewModel item)
+        /*public EditProjectViewModel Update(EditProjectViewModel item)
         {
-            var x = mRepoProject.FindByIdForReload(item.ProjectId);
+            var x = mRepoProject.FindByIdForReload(item.ProjectViewModel.ProjectId);
             x.Title = item.Title;
             
 
             return Convert(mRepoProject.Update(x, item.Item.Timestamp));
+        }*/
+        public EditProjectViewModel Update(EditProjectViewModel item)
+        {
+            try
+            {
+                item.ProjectViewModel = Convert(mRepoProject.Update(item.ProjectViewModel.Item, item.ProjectViewModel.Item.Timestamp));
+                
+                return item;
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                item.ConcurencyErrorText = "Data is not current, please update";
+                item.IsConcurency = true;
+                return item;
+            }
         }
 
         public ProjectViewModel Create(ProjectViewModel item)
@@ -86,6 +104,31 @@ namespace Vs.Pm.Web.Data.Service
         {
             var listProject = mRepoProject.FindById(id);
             return listProject.Title;
+        }
+
+        public ProjectViewModel RefreshItem(ProjectViewModel item)
+        {
+            var x = mRepoProject.Reload(item.ProjectId);
+
+            if (x == null)
+            {
+                return null;
+            }
+
+            return Convert(x);
+        }
+
+        public void ClearAll()
+        {
+            DbContext.dbSetProject.RemoveRange(DbContext.dbSetProject);
+            DbContext.SaveChanges();
+        }
+
+        public List<ProjectViewModel> CreateDate(List<ProjectViewModel> list)
+        {
+            var newList = mRepoProject.CreateBulk(list.Select(x => x.Item).ToList());
+            var resultList = newList.Select(Convert).ToList();
+            return resultList;
         }
     }
 }

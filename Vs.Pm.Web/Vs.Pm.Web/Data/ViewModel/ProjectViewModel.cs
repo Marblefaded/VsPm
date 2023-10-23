@@ -39,7 +39,10 @@ namespace Vs.Pm.Web.Data.ViewModel
             get => _item.ChangeLogJson;
             set => _item.ChangeLogJson = value;
         }
+        /*public bool IsConcurency { get; set; }
 
+        public string ConcurencyErrorText { get; set; }
+*/
         public bool IsDeleteEnabled { get; set; } = true;
     }
 }

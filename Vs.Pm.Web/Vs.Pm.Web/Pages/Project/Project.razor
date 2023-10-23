@@ -2,77 +2,89 @@
 @inherits ProjectView
 <AuthorizeView Roles="Admin, User">
     <Authorized>
-    <body style="background-color:#FFF8DC">
-        <div class="сontainer">
-            <div class="row">
-                <div class="col">
-                    <h3 style="margin-left:9%">
-                        Project
-                    </h3>
+        <body style="background-color:#FFF8DC">
+            <div class="сontainer">
+                <div class="row">
+                    <div class="col">
+                        <h3 style="margin-left:9%">
+                            Project
+                        </h3>
+                    </div>
+                    @if (Model != null)
+                    {
+                        <div class="col col-lg-1">
+                            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Outlined.Add" Color="Color.Error" @onclick="(() => Generator1k())">1k</MudButton>
+                        </div>
+                        <div class="col col-lg-1">
+                            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Outlined.Add" Color="Color.Error" @onclick="(() => Generator10k())">10k</MudButton>
+                        </div>
+                        <div class="col col-lg-1">
+                            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Outlined.Add" Color="Color.Error" @onclick="(() => Generator100k())">100k</MudButton>
+                        </div>
+                        <div class="col col-lg-1">
+                            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Outlined.Add" Color="Color.Error" @onclick="(() => Clear())">Clear</MudButton>
+                        </div>
+                        <div class="col col-lg-1">
+                            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Outlined.Add" Color="Color.Error" @onclick="(() => AddItemDialog())">Create</MudButton>
+                        </div>
+                        <div class="col col-lg-2">
+                            <input style="margin-right:100%" type="text" class="form-control-sm" placeholder="Search" @bind-value="@FilterValue" @bind-value:event="oninput" />
+                        </div>
+                    }
                 </div>
-                @if (Model != null)
-                {
-                    <div class="col col-lg-1">
-                        <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Outlined.Add" Color="Color.Error" @onclick="(() => AddItemDialog())">Create</MudButton>
-                    </div>
-                    <div class="col col-lg-2">
-                        <input style="margin-right:100%" type="text" class="form-control-sm" placeholder="Search" @bind-value="@FilterValue" @bind-value:event="oninput" />
-                    </div>
-                }
             </div>
-        </div>
-        @if (Model == null)
-        {
-            <MudGrid Justify="Justify.Center" Style="align-items: center; margin-top:250px">
-                <MudProgressCircular Color="Color.Error" Size="Size.Large" Indeterminate="true" Style="position:absolute" />
-            </MudGrid>
-        }
-        else
-        {
-            <MudTable Items="@Model" SortLabel="Sort" FixedHeader="true" Height="800px" Style="width: 90%; margin-left: 5%">
-                <HeaderContent>
-                    <MudTh>
-                        <MudTableSortLabel SortBy="new Func<Data.ViewModel.ProjectViewModel, object>(x=>x.ProjectId)">
-                            ID
-                        </MudTableSortLabel>
-                    </MudTh>
-                    <MudTh>
-                        <MudTableSortLabel SortBy="new Func<Data.ViewModel.ProjectViewModel, object>(x=>x.Title)">
-                            Title
-                        </MudTableSortLabel>
-                    </MudTh>
-                    <MudTh></MudTh>
-                </HeaderContent>
-                <RowTemplate Context="item">
-                    <MudTd DataLabel="ID">@item.ProjectId</MudTd>
-                    <MudTd DataLabel="Title">@item.Title</MudTd>
-                    <MudTd>
-                        <MudTooltip Text="Edit">
-                            <MudIconButton Icon="@Icons.Material.Outlined.Edit" Color="Color.Surface" @onclick="(() => EditItemDialog(item))"></MudIconButton>
-                        </MudTooltip>
-                        @if (!item.IsDeleteEnabled)
-                        {
-                            <MudTooltip Text="Can`t delete">
-                                <MudIconButton Icon="@Icons.Material.Filled.Delete" Disabled="true" Color="Color.Error" aria-label="delete" @onclick="(() => DeleteItemAsync(item))"></MudIconButton>
+            @if (Model == null)
+            {
+                <MudGrid Justify="Justify.Center" Style="align-items: center; margin-top:250px">
+                    <MudProgressCircular Color="Color.Error" Size="Size.Large" Indeterminate="true" Style="position:absolute" />
+                </MudGrid>
+            }
+            else
+            {
+                <MudTable Items="@Model" SortLabel="Sort" Virtualize="true" Breakpoint="Breakpoint.Sm" FixedHeader="true" Height="800px" Style="width: 90%; margin-left: 5%">
+                    <HeaderContent>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<Data.ViewModel.ProjectViewModel, object>(x=>x.ProjectId)">
+                                ID
+                            </MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<Data.ViewModel.ProjectViewModel, object>(x=>x.Title)">
+                                Title
+                            </MudTableSortLabel>
+                        </MudTh>
+                        <MudTh></MudTh>
+                    </HeaderContent>
+                    <RowTemplate Context="item">
+                        <MudTd DataLabel="ID">@item.ProjectId</MudTd>
+                        <MudTd DataLabel="Title">@item.Title</MudTd>
+                        <MudTd>
+                            <MudTooltip Text="Edit">
+                                <MudIconButton Icon="@Icons.Material.Outlined.Edit" Color="Color.Surface" @onclick="(() => EditItemDialog(item))"></MudIconButton>
                             </MudTooltip>
-                        }
-                        else
-                        {
-                            <MudTooltip Text="Delete">
-                                <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" aria-label="delete" @onclick="(() => DeleteItemAsync(item))"></MudIconButton>
+                            @if (!item.IsDeleteEnabled)
+                            {
+                                <MudTooltip Text="Can`t delete">
+                                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Disabled="true" Color="Color.Error" aria-label="delete" @onclick="(() => DeleteItemAsync(item))"></MudIconButton>
+                                </MudTooltip>
+                            }
+                            else
+                            {
+                                <MudTooltip Text="Delete">
+                                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" aria-label="delete" @onclick="(() => DeleteItemAsync(item))"></MudIconButton>
+                                </MudTooltip>
+                            }
+                            <MudTooltip Text="Info">
+                                <MudIconButton Icon="@Icons.Material.Filled.Outbound" Color="Color.Surface" @onclick="(() => ChangeLogInfo(item))"></MudIconButton>
                             </MudTooltip>
-                        }
-                        <MudTooltip Text="Info">
-                            <MudIconButton Icon="@Icons.Material.Filled.Outbound" Color="Color.Surface" @onclick="(() => ChangeLogInfo(item))"></MudIconButton>
-                        </MudTooltip>
-                    </MudTd>
-                </RowTemplate>
-                <PagerContent>
-                    <MudTablePager RowsPerPageString="Count of page" PageSizeOptions="new int[]{50, 100}" />
-                </PagerContent>
-            </MudTable>
-        }
-    </body>
+                        </MudTd>
+                    </RowTemplate>
+                    <PagerContent>
+                        <MudTablePager RowsPerPageString="Count of page" PageSizeOptions="new int[]{50, 100}" />
+                    </PagerContent>
+                </MudTable>
+            }
+        </body>
     </Authorized>
     <NotAuthorized>
         <RedirectLogin />
